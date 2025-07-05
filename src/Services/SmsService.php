@@ -26,6 +26,22 @@ class SmsService
     }
 
     /**
+     * Create a new SMS builder instance for fluent interface
+     */
+    public function to(string|array $to): SmsBuilder
+    {
+        return (new SmsBuilder($this))->to($to);
+    }
+
+    /**
+     * Set driver and return builder instance
+     */
+    public function driver(string $driver): SmsBuilder
+    {
+        return (new SmsBuilder($this))->driver($driver);
+    }
+
+    /**
      * Send SMS message
      */
     public function send(string $to, string $message, ?string $driver = null, ?string $from = null): array
@@ -187,7 +203,7 @@ class SmsService
      */
     public function getAvailableDrivers(): array
     {
-        return array_keys($this->config['drivers']);
+        return array_keys($this->config['drivers'] ?? []);
     }
 
     /**
@@ -195,7 +211,6 @@ class SmsService
      */
     public function isDriverConfigured(string $driver): bool
     {
-        return isset($this->config['drivers'][$driver]) && 
-               !empty($this->config['drivers'][$driver]);
+        return isset($this->config['drivers'][$driver]);
     }
 }
